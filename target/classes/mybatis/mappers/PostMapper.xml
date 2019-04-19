@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.loyotech.dao.PostMapper">
+
+    <insert id="insert" parameterType="Post">
+        <!-- userId,title,content,topic -->
+        INSERT INTO post
+        (userId,title,content,topic)
+        VALUES
+        (#{userId},#{title},#{content},#{topic})
+    </insert>
+
+    <insert id="comment" parameterType="Reply">
+		insert into reply
+		(content,userId,postId) 
+		values 
+		(#{content},#{userId},#{postId});
+	</insert>
+
+    <select id="selectPostByTopic" parameterType="String" resultType="Post">
+		select * from post where topic = #{topic}
+	</select>
+
+    <select id="selectPostIdByTitleAndUserId" parameterType="post" resultType="String">
+		select postId from post where title=#{title} and userId=#{userId}
+	</select>
+
+
+    <select id="selectPostByPostId" parameterType="Integer" resultType="Post">
+		select * from post where postId=#{postId}
+	</select>
+
+    <select id="selectAllPost" resultType="Post">
+		select * from post right outer join user as user on 1=1;
+	</select>
+
+    <update id="updateStatus1" parameterType="Integer">
+		update post set status = 1 where postId = #{postId}
+	</update>
+
+    <update id="updateStatus0" parameterType="Integer">
+		update post set status = 0 where postId = #{postId}
+	</update>
+
+    <update id="updateTopic" parameterType="QueryVo">
+		update post set topic = #{newTopic} where topic = #{oldTopic}
+    </update>
+
+    <select id="selectReplyByPostId" parameterType="Integer" resultType="Reply">
+		select * from reply where postId=#{postId}
+	</select>
+
+    <select id="selectPostByKey" parameterType="String" resultType="Post">
+		select * from post where topic like '%${value}%'
+	</select>
+
+    <select id="selectPostByLimit" parameterType="String" resultType="Post">
+		select * from post limit ${pageAndSize}
+	</select>
+
+    <select id="selectPostAboutTopic" resultType="QueryVo">
+		select count(*) as topicNum,topic from post group by topic
+	</select>
+
+	<delete id="deleteTopic" parameterType="String">
+		delete from post where topic = #{topic}
+	</delete>
+</mapper>

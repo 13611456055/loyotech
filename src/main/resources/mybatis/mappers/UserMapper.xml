@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.loyotech.dao.UserMapper">
+	<select id="findPasswordByUserId" parameterType="Integer"
+		resultType="String">
+		select * from user where id=#{id}
+	</select>
+
+
+	<insert id="register" parameterType="User">
+		INSERT INTO user
+		(userId,password,username,addTime,sex,postNum,replyNum,status,thumbUp,collectionNum)
+		VALUES
+		(#{userId},#{password},#{userId},#{addTime},#{sex},#{postNum},#{replyNum},#{status},#{thumbUp}),#{collectionNum}
+	</insert>
+	
+<!-- User login(String userId); -->
+
+	<select id="selectUserById" parameterType="String" resultType="User">
+		select * from user where userId = #{userId}
+	</select>
+
+	<select id="selectUser" resultType="User">
+		select * from user
+	</select>
+	
+	<update id="updatePassword" parameterType="User">
+		update user set password = #{password} where userId = #{userId}
+	</update>
+
+	<update id="updatePostNum" parameterType="String">
+		update user set postNum = postNum+1 where userId = #{uesrId};
+	</update>
+
+	<update id="updateReplyNum" parameterType="String">
+		update user set replyNum = replyNum+1 where userId = #{userId}
+	</update>
+
+	<update id="updateUserStatus" parameterType="QueryVo">
+		update user set status = #{status} where userId = #{userId}
+	</update>
+</mapper>
